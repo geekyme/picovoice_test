@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picovoice/picovoice_manager.dart';
 import 'package:picovoice/picovoice_error.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 void main() {
   runApp(MyApp());
@@ -75,6 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _wakeWordCallback() {
     print("listening for command");
+
+    AssetsAudioPlayer.playAndForget(Audio("/assets/audio/wake_up_speech.mp3"));
+
     setState(() {
       _listeningForCommand = true;
     });
