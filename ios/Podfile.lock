@@ -1,0 +1,40 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_voice_processor (1.0.0):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - porcupine (1.9.12):
+    - Flutter
+  - rhino (1.6.9):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_voice_processor (from `.symlinks/plugins/flutter_voice_processor/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - porcupine (from `.symlinks/plugins/porcupine/ios`)
+  - rhino (from `.symlinks/plugins/rhino/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_voice_processor:
+    :path: ".symlinks/plugins/flutter_voice_processor/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  porcupine:
+    :path: ".symlinks/plugins/porcupine/ios"
+  rhino:
+    :path: ".symlinks/plugins/rhino/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_voice_processor: f563048750dd0dcdca5aac253fa57e86f83a6e54
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  porcupine: 1db970f35ac2d993b0718bf6b15c158e630505f2
+  rhino: 7bb93c8fd1eec8c75369cbc357d836aa536ee4db
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.2

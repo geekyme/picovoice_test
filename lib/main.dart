@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:picovoice/picovoice_manager.dart';
+import 'package:picovoice/picovoice_error.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,6 +49,61 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool _listeningForCommand = false;
+  PicovoiceManager? _picovoiceManager;
+  int audioPlayableIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPicovoice();
+  }
+
+  void _initPicovoice() async {
+    print("init picovoice...");
+    String keywordPath = "assets/keyword_files/ios/jarvis_ios.ppn";
+    String contextPath = "assets/contexts/ios/recipe_ios.rhn";
+
+    try {
+      _picovoiceManager = PicovoiceManager.create(
+          keywordPath, _wakeWordCallback, contextPath, _inferenceCallback);
+      await _picovoiceManager!.start();
+    } on PvError catch (ex) {
+      print(ex);
+    }
+  }
+
+  void _wakeWordCallback() {
+    print("listening for command");
+    setState(() {
+      _listeningForCommand = true;
+    });
+  }
+
+  void _inferenceCallback(Map<String, dynamic> inference) {
+    print(inference);
+    if (inference['isUnderstood']) {
+      if (inference['intent'] == 'next') {
+        setState(() {
+          _counter++;
+        });
+      } else if (inference['intent'] == 'back') {
+        setState(() {
+          _counter--;
+        });
+      } else if (inference['intent'] == 'reset') {
+        setState(() {
+          _counter = 0;
+        });
+      }
+    } else {
+      print("Command not understood");
+    }
+
+    setState(() {
+      _listeningForCommand = false;
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
