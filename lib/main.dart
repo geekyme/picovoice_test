@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picovoice/picovoice_manager.dart';
 import 'package:picovoice/picovoice_error.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:just_audio/just_audio.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _listeningForCommand = false;
   PicovoiceManager? _picovoiceManager;
   int audioPlayableIndex = -1;
+  late AudioPlayer? player;
 
   @override
   void initState() {
@@ -60,31 +61,30 @@ class _MyHomePageState extends State<MyHomePage> {
     _initPicovoice();
   }
 
-  void _initPicovoice() async {
+  Future<void> _initPicovoice() async {
     print("init picovoice...");
+
     String keywordPath = "assets/keyword_files/ios/jarvis_ios.ppn";
     String contextPath = "assets/contexts/ios/recipe_ios.rhn";
 
     try {
       _picovoiceManager = PicovoiceManager.create(
           keywordPath, _wakeWordCallback, contextPath, _inferenceCallback);
-      await _picovoiceManager!.start();
+      await _picovoiceManager?.start();
     } on PvError catch (ex) {
       print(ex);
     }
   }
 
-  void _wakeWordCallback() {
+  void _wakeWordCallback() async {
     print("listening for command");
-
-    AssetsAudioPlayer.playAndForget(Audio("/assets/audio/wake_up_speech.mp3"));
 
     setState(() {
       _listeningForCommand = true;
     });
   }
 
-  void _inferenceCallback(Map<String, dynamic> inference) {
+  void _inferenceCallback(Map<String, dynamic> inference) async {
     print(inference);
     if (inference['isUnderstood']) {
       if (inference['intent'] == 'next') {
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _incrementCounter() {
+  void _incrementCounter() async {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -118,6 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+    try {
+      player = AudioPlayer();
+      await player?.setUrl(
+          'https://yeschef-test.s3.ap-southeast-1.amazonaws.com/test-instruction-1.a64a2eab-ac43-4093-94ea-9ebf16a36bff.mp3');
+      await player?.play();
+      await player?.dispose();
+      player = null;
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
